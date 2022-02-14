@@ -8,7 +8,7 @@ import requests
 import config
 import logging
 
-from uniform_login.uniform_login_spider import login
+from uniform_login_spider import login
 import utils
 
 
