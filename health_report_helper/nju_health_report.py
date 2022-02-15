@@ -78,21 +78,22 @@ class msg(object):
 msg().main()
 
 if __name__ == '__main__':
+    printT("南京大学每日健康自动填报")
     if len(sys.argv) > 1:
         config.data = json.loads(re.sub('#(.*)\n', '\n', sys.argv[1]).replace("'", '"'))
     if utils.get_GMT8_timestamp() > utils.str_to_timestamp(config.data['deadline'], '%Y-%m-%d'):
-        logging.info("超出填报日期")
-        send("南京大学每日健康自动填报：填报失败，超出填报日期")
+        msg("超出填报日期")
+        send("南京大学每日健康自动填报",msg_info)
         exit(-1)
     # retry mechanism
     for _ in range(5):
         try:
             random.seed(datetime.datetime.now())
-            sleep_time = random.randint(500, 1000)
-            logging.info("任务触发时间 (GMT+8): " + utils.get_GMT8_str('%Y-%m-%d %H:%M:%S'))
-            logging.info("延时:" + str(sleep_time) + "秒")
+            sleep_time = random.randint(5, 10)
+            msg("任务触发时间 (GMT+8): " + utils.get_GMT8_str('%Y-%m-%d %H:%M:%S'))
+            msg("延时:" + str(sleep_time) + "秒")
             time.sleep(sleep_time)
-            logging.info("开始打卡时间 (GMT+8): " + utils.get_GMT8_str('%Y-%m-%d %H:%M:%S'))
+            msg("开始打卡时间 (GMT+8): " + utils.get_GMT8_str('%Y-%m-%d %H:%M:%S'))
             spider.main(config.data['username'], config.data['password'])
             msg("南京大学每日健康自动填报：填报成功！")
             break
@@ -102,3 +103,4 @@ if __name__ == '__main__':
             send("南京大学每日健康自动填报：填报失败，错误为%s" %e)
             logging.exception(e)
             time.sleep(5)
+    send("南京大学每日健康自动填报",msg_info)
