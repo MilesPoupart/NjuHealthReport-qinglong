@@ -9,6 +9,7 @@ import sys
 import logging
 import time,datetime
 import os
+import random
 
 import config
 import spider
@@ -86,6 +87,12 @@ if __name__ == '__main__':
     # retry mechanism
     for _ in range(5):
         try:
+            random.seed(datetime.datetime.now())
+            sleep_time = random.randint(500, 1000)
+            logging.info("任务触发时间 (GMT+8): " + utils.get_GMT8_str('%Y-%m-%d %H:%M:%S'))
+            logging.info("延时:" + str(sleep_time) + "秒")
+            time.sleep(sleep_time)
+            logging.info("开始打卡时间 (GMT+8): " + utils.get_GMT8_str('%Y-%m-%d %H:%M:%S'))
             spider.main(config.data['username'], config.data['password'])
             msg("南京大学每日健康自动填报：填报成功！")
             break
