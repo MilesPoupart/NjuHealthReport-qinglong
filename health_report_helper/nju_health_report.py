@@ -40,6 +40,7 @@ class msg(object):
         try:
             url = 'https://gitee.com/curtinlv/Public/raw/master/sendNotify.py'
             response = requests.get(url)
+            msg("Downloading...")
             if 'curtinlv' in response.text:
                 with open('sendNotify.py', "w+", encoding="utf-8") as f:
                     f.write(response.text)
