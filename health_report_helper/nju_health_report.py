@@ -10,7 +10,7 @@ import logging
 import time,datetime
 import os
 import random
-
+import requests
 import config
 import spider
 import utils
