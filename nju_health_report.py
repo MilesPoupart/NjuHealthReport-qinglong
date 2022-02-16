@@ -273,9 +273,9 @@ if __name__ == '__main__':
         config_data['delay_min'] = int(nju_report_delay[0])
         config_data['delay_max'] = int(nju_report_delay[1])
     else:
-        msg("未设置nju_report_delay环境变量！将启用默认10s-60s延迟")
-        config_data['delay_min'] = 10
-        config_data['delay_max'] = 60
+        msg("未设置nju_report_delay环境变量！将启用默认0s-1500s延迟")
+        config_data['delay_min'] = 0
+        config_data['delay_max'] = 1500
 
     if get_GMT8_timestamp() > str_to_timestamp(config_data['deadline'], '%Y-%m-%d'):
         msg("超出填报日期")
