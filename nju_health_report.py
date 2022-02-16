@@ -263,6 +263,15 @@ if __name__ == '__main__':
     else:
         msg("未设置nju_report_enddate环境变量！将默认打卡")
         config_data['deadline'] = '2099-12-31'
+    
+    if "nju_report_delay" in os.environ and os.environ["nju_report_delay"]:
+        nju_report_delay=os.environ["nju_report_delay"].split("&")
+        config_data['delay_min'] = int(nju_report_delay[0])
+        config_data['delay_max'] = int(nju_report_delay[1])
+    else:
+        msg("未设置nju_report_delay环境变量！将启用默认10s-60s延迟")
+        config_data['delay_min'] = 10
+        config_data['delay_max'] = 60
 
     if get_GMT8_timestamp() > str_to_timestamp(config_data['deadline'], '%Y-%m-%d'):
         msg("超出填报日期")
@@ -272,7 +281,7 @@ if __name__ == '__main__':
     for _ in range(5):
         try:
             random.seed(str(datetime.datetime.now()))
-            sleep_time = random.randint(5, 10)
+            sleep_time = random.randint(config_data['delay_min'], config_data['delay_max'])
             msg("任务触发时间 (GMT+8): " + get_GMT8_str('%Y-%m-%d %H:%M:%S'))
             msg("延时:" + str(sleep_time) + "秒")
             time.sleep(sleep_time)
