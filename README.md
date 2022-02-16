@@ -24,7 +24,9 @@ docker run -dit \
 在依赖管理-Linux添加gcc、g++依赖，然后在依赖管理-Python3添加requests、pycryptodome、pycryptodomex依赖
 
 ### 拉取脚本
-`ql raw https://raw.githubusercontent.com/MilesPoupart/NjuHealthReport-qinglong/master/nju_health_report.py`
+```
+ql raw https://raw.githubusercontent.com/MilesPoupart/NjuHealthReport-qinglong/master/nju_health_report.py
+```
 
 ### 添加环境变量
 1. nju_data（必填）：格式为学号\*&\*明文密码，如MG21000000\*&\*password
