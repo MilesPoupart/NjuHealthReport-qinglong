@@ -16,7 +16,7 @@ docker run -dit \
    --restart always \
    whyour/qinglong:latest
 ```
-随后，通过http://<ip>:5700登录面板进行配置。
+随后，通过http://\<ip\>:5700登录面板进行配置。
 
 更多命令可参见[青龙项目指南](https://t.me/jiao_long/31)
 
