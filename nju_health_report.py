@@ -1,3 +1,8 @@
+# -*- coding:utf-8 -*-
+"""
+cron: 20 10 */7 * *
+new Env('禁用重复任务');
+"""
 from Cryptodome.Cipher import AES
 import base64
 import json
