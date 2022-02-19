@@ -39,6 +39,9 @@ ql raw https://raw.githubusercontent.com/MilesPoupart/NjuHealthReport-qinglong/m
 ### 设置定时
 已默认设置定时为16 8,16,21 * * *，即每天8:16、16:16、21:16自动触发任务，如有需要，可手动修改。
 
+## 已知问题
+目前如果填报失败程序会出错退出，无法进行推送通知，已排查到与Exception相关，正在fix中。
+
 ## 鸣谢
 @whyour 的青龙面板项目 https://github.com/whyour/qinglong
 
