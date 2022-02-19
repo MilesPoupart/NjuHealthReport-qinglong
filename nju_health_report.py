@@ -255,9 +255,7 @@ if __name__ == '__main__':
     printT("南京大学每日健康自动填报")
     config_data = {}
     if "nju_data" in os.environ and os.environ["nju_data"]:
-        nju_data = os.environ["nju_data"].split("*&*")
-        config_data['username'] = nju_data[0]
-        config_data['password'] = nju_data[1]
+        config_data['userinfo']= os.environ["nju_data"].split("@&@")
     else:
         msg("未设置nju_data环境变量！")
         send("南京大学每日健康自动填报", msg_info)
@@ -291,8 +289,11 @@ if __name__ == '__main__':
             msg("延时:" + str(sleep_time) + "秒")
             time.sleep(sleep_time)
             msg("开始打卡时间 (GMT+8): " + get_GMT8_str('%Y-%m-%d %H:%M:%S'))
-            spidermain(config_data['username'], config_data['password'])
-            msg("南京大学每日健康自动填报：%s填报成功！" % config_data['username'])
+            for each_user in config_data['userinfo']:
+                now_user_info=each_user.split("*&*")
+                spidermain(now_user_info[0], now_user_info[1])
+                msg("南京大学每日健康自动填报：%s填报成功！" % now_user_info[0])
+                time.sleep(5)
             break
         except Exception as e:
             if _ == 4:

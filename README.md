@@ -29,9 +29,9 @@ ql raw https://raw.githubusercontent.com/MilesPoupart/NjuHealthReport-qinglong/m
 ```
 
 ### 添加环境变量
-1. nju_data（必填）：格式为学号\*&\*明文密码，如MG21000000\*&\*password
-2. nju_report_enddate（可选）：在此日期前自动填报，格式为2022-12-31，不填默认打卡
-3. nju_report_delay（可选）：触发任务后的延迟上下限，格式为延时下限&延时上限（秒），默认为0&1500即延时0s-1500s，请注意青龙面板配置文件config.sh中设置的单任务最大运行时间CommandTimeoutTime，以免运行时间过长被强制结束。
+1. nju_data（必填）：格式为`学号*&*明文密码`，如`MG21000000*&*password`，多账号请用"@&@"分割，如`MG21000000*&*password1@&@MG21000001*&*password2`
+2. nju_report_enddate（可选）：在此日期前自动填报，格式为`2022-12-31`，不填默认打卡
+3. nju_report_delay（可选）：触发任务后的延迟上下限，格式为延时下限&延时上限（秒），默认为`0&1500`即延时0s-1500s，请注意青龙面板配置文件config.sh中设置的单任务最大运行时间CommandTimeoutTime，以免运行时间过长被强制结束。
 
 ### 微信/电报通知
 只要在config.sh中配置好了通知设置，就可以自动通知
@@ -42,4 +42,4 @@ ql raw https://raw.githubusercontent.com/MilesPoupart/NjuHealthReport-qinglong/m
 ## 鸣谢
 @whyour 的青龙面板项目 https://github.com/whyour/qinglong
 
-@zhangt2333 的原项目https://github.com/zhangt2333/actions-NjuHealthReport
+@zhangt2333 的原项目 https://github.com/zhangt2333/actions-NjuHealthReport
