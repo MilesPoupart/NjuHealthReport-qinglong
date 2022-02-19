@@ -300,7 +300,7 @@ if __name__ == '__main__':
             except Exception as e:
                 if _ == 4:
                     raise e
-                msg("南京大学每日健康自动填报：填报失败，错误为%s" % e)
+                msg("南京大学每日健康自动填报：填报失败，错误为%s" % str(e))
                 logging.exception(e)
                 time.sleep(5)
     send("南京大学每日健康自动填报", msg_info)
