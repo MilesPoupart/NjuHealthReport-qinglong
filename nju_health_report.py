@@ -96,6 +96,7 @@ class msg(object):
             except:
                 printT("加载通知服务失败~")
 
+
         ###################
 msg().main()
 
@@ -255,7 +256,7 @@ if __name__ == '__main__':
     printT("南京大学每日健康自动填报")
     config_data = {}
     if "nju_data" in os.environ and os.environ["nju_data"]:
-        config_data['userinfo']= os.environ["nju_data"].split("@&@")
+        config_data['userinfo'] = os.environ["nju_data"].split("@&@")
     else:
         msg("未设置nju_data环境变量！")
         send("南京大学每日健康自动填报", msg_info)
@@ -280,26 +281,26 @@ if __name__ == '__main__':
         send("南京大学每日健康自动填报", msg_info)
         exit(-1)
     # retry mechanism
-    for _ in range(5):
-        try:
-            random.seed(str(datetime.datetime.now()))
-            sleep_time = random.randint(
-                config_data['delay_min'], config_data['delay_max'])
-            msg("任务触发时间 (GMT+8): " + get_GMT8_str('%Y-%m-%d %H:%M:%S'))
-            msg("延时:" + str(sleep_time) + "秒")
-            time.sleep(sleep_time)
-            msg("开始打卡时间 (GMT+8): " + get_GMT8_str('%Y-%m-%d %H:%M:%S'))
-            for each_user in config_data['userinfo']:
-                now_user_info=each_user.split("*&*")
+    for each_user in config_data['userinfo']:
+        now_user_info = each_user.split("*&*")
+        for _ in range(5):
+            try:
+                random.seed(str(datetime.datetime.now()))
+                sleep_time = random.randint(
+                    config_data['delay_min'], config_data['delay_max'])
+                msg("任务触发时间 (GMT+8): " + get_GMT8_str('%Y-%m-%d %H:%M:%S'))
+                msg("延时:" + str(sleep_time) + "秒")
+                time.sleep(sleep_time)
+                msg("开始打卡时间 (GMT+8): " + get_GMT8_str('%Y-%m-%d %H:%M:%S'))
                 msg("南京大学每日健康自动填报：%s开始打卡！" % now_user_info[0])
                 spidermain(now_user_info[0], now_user_info[1])
                 msg("南京大学每日健康自动填报：%s填报成功！" % now_user_info[0])
                 time.sleep(5)
-            break
-        except Exception as e:
-            if _ == 4:
-                raise e
-            send("南京大学每日健康自动填报：填报失败，错误为%s" % e)
-            logging.exception(e)
-            time.sleep(5)
+                break
+            except Exception as e:
+                if _ == 4:
+                    raise e
+                msg("南京大学每日健康自动填报：填报失败，错误为%s" % e)
+                logging.exception(e)
+                time.sleep(5)
     send("南京大学每日健康自动填报", msg_info)
