@@ -7,6 +7,18 @@
 openwrt系统若已内置docker，可在拉取whyour/qinglong:latest镜像后，使用以下代码创建容器：
 ```
 docker run -dit \
+   -v $PWD/ql/config:/ql/data/config \
+   -v $PWD/ql/log:/ql/data/log \
+   -v $PWD/ql/db:/ql/data/db \
+   --net host \
+   --name qinglong \
+   --hostname qinglong \
+   --restart always \
+   whyour/qinglong:latest
+```
+青龙版本<=2.11请使用以下代码：
+```
+docker run -dit \
    -v $PWD/ql/config:/ql/config \
    -v $PWD/ql/log:/ql/log \
    -v $PWD/ql/db:/ql/db \
@@ -16,6 +28,7 @@ docker run -dit \
    --restart always \
    whyour/qinglong:latest
 ```
+
 随后，通过http://\<ip\>:5700登录面板进行配置。
 
 更多命令可参见[青龙项目指南](https://t.me/jiao_long/31)
