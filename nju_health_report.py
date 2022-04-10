@@ -237,10 +237,10 @@ def spidermain(username, password):
         elif apply_list[1].get('CURR_LOCATION') is not None:
             location = apply_list[1].get('CURR_LOCATION')
         
-        if apply_list[0].get('SFZJLN_DISPLAY') is not None:
-            leave_nanjing = apply_list[0].get('SFZJLN_DISPLAY')
-        elif apply_list[1].get('SFZJLN_DISPLAY') is not None:
-            leave_nanjing = apply_list[1].get('SFZJLN_DISPLAY')
+        if apply_list[0].get('SFZJLN') is not None:
+            leave_nanjing = apply_list[0].get('SFZJLN')
+        elif apply_list[1].get('SFZJLN') is not None:
+            leave_nanjing = apply_list[1].get('SFZJLN')
         
         if apply_list[0].get('ZJHSJCSJ') is not None:
             last_test_time = apply_list[0].get('ZJHSJCSJ')
