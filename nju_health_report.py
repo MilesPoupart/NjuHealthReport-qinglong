@@ -198,7 +198,7 @@ def get_apply_list(cookies):
         raise e
 
 
-def do_apply(cookies, WID, location):
+def do_apply(cookies, WID, location,leave_nanjing,last_test_time):
     try:
         response = requests.get(
             url='http://ehallapp.nju.edu.cn/xgfw/sys/yqfxmrjkdkappnju/apply/saveApplyInfos.do',
@@ -208,7 +208,9 @@ def do_apply(cookies, WID, location):
                 IS_HAS_JKQK=1,
                 JRSKMYS=1,
                 JZRJRSKMYS=1,
-                CURR_LOCATION=location
+                CURR_LOCATION=location,
+                SFZJLN_DISPLAY=leave_nanjing,
+                ZJHSJCSJ=last_test_time
             ),
             headers=req_headers,
             cookies=cookies
@@ -234,11 +236,21 @@ def spidermain(username, password):
             location = apply_list[0].get('CURR_LOCATION')
         elif apply_list[1].get('CURR_LOCATION') is not None:
             location = apply_list[1].get('CURR_LOCATION')
+        
+        if apply_list[0].get('SFZJLN_DISPLAY') is not None:
+            leave_nanjing = apply_list[0].get('SFZJLN_DISPLAY')
+        elif apply_list[1].get('SFZJLN_DISPLAY') is not None:
+            leave_nanjing = apply_list[1].get('SFZJLN_DISPLAY')
+        
+        if apply_list[0].get('ZJHSJCSJ') is not None:
+            last_test_time = apply_list[0].get('ZJHSJCSJ')
+        elif apply_list[1].get('ZJHSJCSJ') is not None:
+            last_test_time = apply_list[1].get('ZJHSJCSJ')
     except Exception as e:
-        logging.exception(e, '取昨日地址错误, 请手动在App填报一次')
+        logging.exception(e, '取昨日信息错误, 请手动在App填报一次')
         raise e
     # 填报当天
-    do_apply(cookies, apply_list[0]['WID'], location)
+    do_apply(cookies, apply_list[0]['WID'], location,leave_nanjing,last_test_time)
 
 
 req_headers = {
@@ -295,6 +307,7 @@ if __name__ == '__main__':
                 msg("南京大学每日健康自动填报：%s开始打卡！" % now_user_info[0])
                 spidermain(now_user_info[0], now_user_info[1])
                 msg("南京大学每日健康自动填报：%s填报成功！" % now_user_info[0])
+                msg("如果最近有离开南京或新做核酸，请及时手动重新填报！")
                 time.sleep(5)
                 break
             except Exception as e:
