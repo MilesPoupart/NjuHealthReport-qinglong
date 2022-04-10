@@ -209,7 +209,7 @@ def do_apply(cookies, WID, location,leave_nanjing,last_test_time):
                 JRSKMYS=1,
                 JZRJRSKMYS=1,
                 CURR_LOCATION=location,
-                SFZJLN_DISPLAY=leave_nanjing,
+                SFZJLN=leave_nanjing,
                 ZJHSJCSJ=last_test_time
             ),
             headers=req_headers,
@@ -251,11 +251,7 @@ def spidermain(username, password):
         raise e
     # 填报当天
     msg("填报位置：%s" %location)
-    msg("近期是否离开南京：%s" %leave_nanjing)
-    if leave_nanjing=="是":
-        leave_nanjing=1
-    else:
-        leave_nanjing=0
+    msg("近期是否离开南京（1-是 0-否）：%s" %leave_nanjing)
     msg("上次核酸检测时间：%s" %last_test_time)
     do_apply(cookies, apply_list[0]['WID'], location,leave_nanjing,last_test_time)
 
@@ -264,10 +260,10 @@ req_headers = {
     "Host": "ehallapp.nju.edu.cn",
     "Connection": "keep-alive",
     "Accept": "application/json, text/plain, */*",
-    "User-Agent": "Mozilla/5.0 (Linux; Android 6.0.1; k30pro Build/V417IR; wv) AppleWebKit/537.36 (KHTML, like Gecko) Version/4.0 Chrome/52.0.2743.100 Mobile Safari/537.36  cpdaily/8.2.15 wisedu/8.2.15",
+    "User-Agent": "Mozilla/5.0 (Linux; Android 10; NOH-AN00 Build/HUAWEINOH-AN00; wv) AppleWebKit/537.36 (KHTML, like Gecko) Version/4.0 Chrome/88.0.4324.93 Mobile Safari/537.36 cpdaily/9.0.15 wisedu/9.0.15",
     "Referer": "http://ehallapp.nju.edu.cn/xgfw/sys/mrjkdkappnju/index.html",
     "Accept-Encoding": "gzip, deflate",
-    "Accept-Language": "zh-CN,en-US;q=0.8",
+    "Accept-Language": "zh-CN,zh;q=0.9,en-CN;q=0.8,en;q=0.7,zh-HK;q=0.6,en-US;q=0.5",
     "X-Requested-With": "com.wisedu.cpdaily.nju",
 }
 
@@ -314,7 +310,7 @@ if __name__ == '__main__':
                 msg("南京大学每日健康自动填报：%s开始打卡！" % now_user_info[0])
                 spidermain(now_user_info[0], now_user_info[1])
                 msg("南京大学每日健康自动填报：%s填报成功！" % now_user_info[0])
-                msg("如果最近有离开南京或新做核酸，请及时手动重新填报！")
+                msg("如果14天内离开南京情况变化或新做核酸，请及时手动重新填报！")
                 time.sleep(5)
                 break
             except Exception as e:
