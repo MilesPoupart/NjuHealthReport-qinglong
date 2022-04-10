@@ -250,6 +250,9 @@ def spidermain(username, password):
         logging.exception(e, '取昨日信息错误, 请手动在App填报一次')
         raise e
     # 填报当天
+    msg("填报位置：%s" %location)
+    msg("近期是否离开南京：%s" %leave_nanjing)
+    msg("上次核酸检测时间：%s" %last_test_time)
     do_apply(cookies, apply_list[0]['WID'], location,leave_nanjing,last_test_time)
 
 
