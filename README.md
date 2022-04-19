@@ -1,10 +1,13 @@
 # 南京大学每日健康填报自动打卡（适用青龙面板）
 
-请注意，2022年4月10日更新后，会强制获取前一天关于近期是否离宁和最近核酸日期的结果，并进行填报。
+## 重要说明
+2022年4月19日更新后，为识别验证码，增加了ddddocr这一依赖，请在青龙面板中手动添加！
+
+2022年4月10日更新后，会强制获取前一天关于近期是否离宁和最近核酸日期的结果，并进行填报。
 
 如果近期离宁情况更新或新做核酸检测，请务必手动填报一次！
 
-如果APP界面中没有离宁情况和核酸检测的填报项，请停留在62dc0f6这一commit，不要更新！！！
+
 
 ## 使用指南
 ### 在docker中安装部署青龙面板
@@ -40,7 +43,7 @@ docker run -dit \
 更多命令可参见[青龙项目指南](https://t.me/jiao_long/31)
 
 ### 添加依赖
-在依赖管理-Linux添加gcc、g++依赖，然后在依赖管理-Python3添加requests、pycryptodome、pycryptodomex依赖
+在依赖管理-Linux添加gcc、g++依赖，然后在依赖管理-Python3添加requests、pycryptodome、pycryptodomex、ddddocr依赖
 
 ### 拉取脚本
 ```
@@ -62,6 +65,10 @@ ql raw https://raw.githubusercontent.com/MilesPoupart/NjuHealthReport-qinglong/m
 目前如果填报失败程序会出错退出，无法进行推送通知，已排查到与Exception相关，正在fix中。
 
 ## 鸣谢
-@whyour 的青龙面板项目 https://github.com/whyour/qinglong
+@whyour 的青龙面板项目（运行环境） https://github.com/whyour/qinglong
 
-@zhangt2333 的原项目 https://github.com/zhangt2333/actions-NjuHealthReport
+@zhangt2333 的原项目（源码魔改基础） https://github.com/zhangt2333/actions-NjuHealthReport
+
+@kottory 的项目（统一session、验证码识别） https://github.com/kottory/NJU-health-report
+
+@curtinlv项目（通知脚本） https://github.com/curtinlv/JD-Script

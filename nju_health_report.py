@@ -14,6 +14,8 @@ import datetime
 import os
 import random
 import requests
+from io import BytesIO
+import ddddocr
 
 
 # from utils.py
@@ -58,7 +60,7 @@ class msg(object):
             a += 1
         try:
             url = 'https://gitee.com/curtinlv/Public/raw/master/sendNotify.py'
-            response = requests.get(url)
+            response = session.get(url)
             # msg("Downloading...")
             if 'curtinlv' in response.text:
                 with open('sendNotify.py', "w+", encoding="utf-8") as f:
@@ -96,7 +98,6 @@ class msg(object):
             except:
                 printT("加载通知服务失败~")
 
-
         ###################
 msg().main()
 
@@ -114,8 +115,43 @@ def password_encrypt(text: str, key: str):
     return str(base64.b64encode(aes.encrypt(text)), 'utf-8')
 
 
+def detect(input):
+    ocr = ddddocr.DdddOcr(show_ad=0)
+    with input as f:
+        res = ocr.classification(f.read())
+    return res
+
+
+def needCaptcha(username):
+    url = 'https://authserver.nju.edu.cn/authserver/needCaptcha.html?username={}'.format(
+        username)
+    r = session.post(url)
+    if 'true' in r.text:
+        return True
+    else:
+        return False
+
+
+def getCaptchaCode():
+    """
+    DESCRIPTION:
+        Getting captcha code binded with IP
+    RETURN_VALUE:
+        captcha code image(ByteIO). Recommended using Image.show() in PIL.
+    """
+    url = 'https://authserver.nju.edu.cn/authserver/captcha.html'
+    res = session.get(url, stream=True)
+    return BytesIO(res.content)
+
 # example: login(username='your-student-id', password='your-password', to_url='https://ehall.nju.edu.cn:443/login?service=https://ehall.nju.edu.cn/ywtb-portal/official/index.html')
+
+
 def login(username, password, to_url):
+    captchaText = ""
+    if needCaptcha(username):
+        msg("统一认证平台需要输入验证码才能继续，尝试识别验证码...")
+        captchaText = detect(getCaptchaCode())
+
     """登录并返回JSESSIONID"""
     url = 'https://authserver.nju.edu.cn/authserver/login?service=' + to_url
     lt, dllt, execution, _eventId, rmShown, pwdDefaultEncryptSalt, cookies = getLoginCasData(
@@ -123,6 +159,7 @@ def login(username, password, to_url):
     data = dict(
         username=username,
         password=password_encrypt(password, pwdDefaultEncryptSalt),
+        captchaResponse=captchaText,
         lt=lt,
         dllt=dllt,
         execution=execution,
@@ -130,7 +167,7 @@ def login(username, password, to_url):
         rmShown=rmShown,
     )
     try:
-        response = requests.post(
+        response = session.post(
             url=url,
             headers=HEADERS_LOGIN,
             data=data,
@@ -149,7 +186,7 @@ def login(username, password, to_url):
 def getLoginCasData(url):
     """返回CAS数据和初始JSESSIONID"""
     try:
-        response = requests.get(
+        response = session.get(
             url=url,
             headers=HEADERS_LOGIN
         )
@@ -186,7 +223,7 @@ HEADERS_LOGIN = {
 
 def get_apply_list(cookies):
     try:
-        response = requests.get(
+        response = session.get(
             url='http://ehallapp.nju.edu.cn/xgfw/sys/yqfxmrjkdkappnju/apply/getApplyInfoList.do',
             headers=req_headers,
             cookies=cookies
@@ -198,9 +235,9 @@ def get_apply_list(cookies):
         raise e
 
 
-def do_apply(cookies, WID, location,leave_nanjing,last_test_time):
+def do_apply(cookies, WID, location, leave_nanjing, last_test_time):
     try:
-        response = requests.get(
+        response = session.get(
             url='http://ehallapp.nju.edu.cn/xgfw/sys/yqfxmrjkdkappnju/apply/saveApplyInfos.do',
             params=dict(
                 WID=WID,
@@ -236,12 +273,12 @@ def spidermain(username, password):
             location = apply_list[0].get('CURR_LOCATION')
         elif apply_list[1].get('CURR_LOCATION') is not None:
             location = apply_list[1].get('CURR_LOCATION')
-        
+
         if apply_list[0].get('SFZJLN') is not None:
             leave_nanjing = apply_list[0].get('SFZJLN')
         elif apply_list[1].get('SFZJLN') is not None:
             leave_nanjing = apply_list[1].get('SFZJLN')
-        
+
         if apply_list[0].get('ZJHSJCSJ') is not None:
             last_test_time = apply_list[0].get('ZJHSJCSJ')
         elif apply_list[1].get('ZJHSJCSJ') is not None:
@@ -250,10 +287,11 @@ def spidermain(username, password):
         logging.exception(e, '取昨日信息错误, 请手动在App填报一次')
         raise e
     # 填报当天
-    msg("填报位置：%s" %location)
-    msg("近期是否离开南京（1-是 0-否）：%s" %leave_nanjing)
-    msg("上次核酸检测时间：%s" %last_test_time)
-    do_apply(cookies, apply_list[0]['WID'], location,leave_nanjing,last_test_time)
+    msg("填报位置：%s" % location)
+    msg("近期是否离开南京（1-是 0-否）：%s" % leave_nanjing)
+    msg("上次核酸检测时间：%s" % last_test_time)
+    do_apply(cookies, apply_list[0]['WID'],
+             location, leave_nanjing, last_test_time)
 
 
 req_headers = {
@@ -269,6 +307,7 @@ req_headers = {
 
 if __name__ == '__main__':
     printT("南京大学每日健康自动填报")
+    session = requests.Session()
     config_data = {}
     if "nju_data" in os.environ and os.environ["nju_data"]:
         config_data['userinfo'] = os.environ["nju_data"].split("@&@")
