@@ -263,7 +263,7 @@ def do_apply(cookies, WID, location, leave_nanjing, last_test_time):
 def spidermain(username, password):
     # 登录
     cookies = login(username, password,
-                    'http://ehallapp.nju.edu.cn/xgfw/sys/yqfxmrjkdkappnju/apply/getApplyInfoList.do')
+                    'https://ehallapp.nju.edu.cn/xgfw/sys/mrjkdkappnju/index.do')
     # 获取填报列表
     apply_list = get_apply_list(cookies)
     if not apply_list[0]['TBRQ'] == get_GMT8_str('%Y-%m-%d'):

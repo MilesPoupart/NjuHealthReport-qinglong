@@ -78,4 +78,7 @@ ql raw https://raw.githubusercontent.com/MilesPoupart/NjuHealthReport-qinglong/m
 
 @kottory 的项目（统一session、验证码识别） https://github.com/kottory/NJU-health-report
 
+@maxco2的项目（修改请求cookies的url）https://github.com/maxco2/LoveAndPeaceReport
+
 @curtinlv项目（通知脚本） https://github.com/curtinlv/JD-Script
+
